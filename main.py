@@ -13,7 +13,6 @@ from flask import request
 app = Flask(__name__.split('.')[0])
 
 motion_enabled = False
-temp_var = "bla"
 
 @app.route('/')
 def hello():
@@ -25,13 +24,16 @@ def get_motion_config():
     """ Return the current configuration the alarm needs to be put in. """
     return "motion_enabled = {0}".format(motion_enabled)
 
-@app.route('/alarm-config/get-test')
-def get_test():
-    """ Return the current configuration the alarm needs to be put in. """
-    return temp_var
-
 @app.route('/alarm-config/set-motion', methods=['POST'])
 def set_motion_config():
-    global temp_var
-    temp_var = str(request.values)
+    """
+    Config to set motion on or off.
+
+    example on how to set on client side:
+    import requests
+    r = requests.post('https://rasp-lou-server.appspot.com/alarm-config/set-motion',
+                      data={'enabled': 'True'})
+    """
+    global motion_enabled
+    motion_enabled = request.form.get('enabled') == 'True'
     return "success", 201

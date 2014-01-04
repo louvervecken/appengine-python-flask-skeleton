@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <body bgcolor="black">
+    <title>My alarm dashboard, if you are a burglar please leave alarm switched on.</title>
+    <h1 style="color:white" Align='Center'>Alarm dashboard</h1>
+    <TR>
+        <TD Align='Center' Valign='Middle' width='100%' height='24'>
+            {% if armed %}
+                <a href='set?enabled=False'>
+                    <img src='../pics_and_buttons/armed.jpg' alt='' width='314px' height='115px'>
+                </a>
+            {% else %}
+                <a href='set?enabled=True'>
+                    <img src='../pics_and_buttons/off.jpg' alt='' width='314px' height='115px'>
+                </a>
+            {% endif %}
+        </TD>
+    </TR>
+  </body>
+</html>
+

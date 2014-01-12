@@ -14,17 +14,19 @@ from flask import redirect
 app = Flask(__name__.split('.')[0])
 
 alarm_enabled = False
+cpu_temp = 0.0
 
 @app.route('/')
 def hello():
     """ Return hello template at application root URL."""
     return render_template('hello.html')
 
-@app.route('/alarm-config/dashboard')
-def alarm_dashboard():
-    """ Show user dashboard for alarm configuration and state. """
-    return render_template('alarm-dashboard.html',
-                           armed=alarm_enabled)
+@app.route('/dashboard')
+def dashboard():
+    """ Show user dashboard. """
+    return render_template('dashboard.html',
+                           armed=alarm_enabled,
+                           cpu_temp=cpu_temp)
 
 @app.route('/alarm-config/get')
 def get_alarm_config():
@@ -49,4 +51,20 @@ def set_alarm_config():
     # or coming from dashboard
     else:
         alarm_enabled = request.args.get('enabled') == 'True'
-        return redirect('/alarm-config/dashboard')
+        return redirect('/dashboard')
+        
+@app.route('/data-posting', methods=['POST'])
+def post_data():
+    """
+    Receive data from rasp client to store in DB
+
+    example on how to post from client side:
+    import requests
+    r = requests.post('https://rasp-lou-server.appspot.com/data-posting',
+                      data={'cpu_temp': 44.3})
+    """
+    global cpu_temp
+    # if it is a post from the python client
+    if request.method=='POST':
+        cpu_temp = request.form.get('cpu_temp')
+        return "success", 201

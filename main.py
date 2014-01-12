@@ -15,6 +15,8 @@ app = Flask(__name__.split('.')[0])
 
 alarm_enabled = False
 cpu_temp = 0.0
+ram_perc = 0.0
+free_storage = 0.0
 
 @app.route('/')
 def hello():
@@ -26,7 +28,9 @@ def dashboard():
     """ Show user dashboard. """
     return render_template('dashboard.html',
                            armed=alarm_enabled,
-                           cpu_temp=cpu_temp)
+                           cpu_temp=cpu_temp,
+                           ram_perc=ram_perc,
+                           free_storage=free_storage)
 
 @app.route('/alarm-config/get')
 def get_alarm_config():
@@ -63,8 +67,10 @@ def post_data():
     r = requests.post('https://rasp-lou-server.appspot.com/data-posting',
                       data={'cpu_temp': 44.3})
     """
-    global cpu_temp
+    global cpu_temp, ram_perc, free_storage
     # if it is a post from the python client
     if request.method=='POST':
         cpu_temp = request.form.get('cpu_temp')
+        ram_perc = request.form.get('ram_perc')
+        free_storage = request.form.get('free_storage')
         return "success", 201

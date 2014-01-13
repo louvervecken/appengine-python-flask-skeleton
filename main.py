@@ -85,8 +85,8 @@ def post_data():
     state = db.get(state_key)
     # if it is a post from the python client
     if request.method=='POST':
-        state.cpu_temp = request.form.get('cpu_temp')
-        state.ram_perc = request.form.get('ram_perc')
+        state.cpu_temp = float(request.form.get('cpu_temp'))
+        state.ram_perc = float(request.form.get('ram_perc'))
         state.free_storage = float(request.form.get('free_storage'))
         state.put()
         return "success", 201

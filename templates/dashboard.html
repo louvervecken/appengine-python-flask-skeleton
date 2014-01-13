@@ -2,7 +2,7 @@
 <html>
   <body bgcolor="black">
     <title>My alarm dashboard, if you are a burglar please leave alarm switched on.</title>
-    <h1 style="color:white" align='Center'>Alarm dashboard</h1>
+    <h1 style="color:white" align='Center'>LouPi Dashboard</h1>
     <TR>
         <TD>
             {% if armed %}
@@ -28,7 +28,7 @@
     </TR>
     <TR>
         <TD>
-            <h4 style="color:white" align='Center'> Free storage: {{ free_storage }}GB </h4>
+            <h4 style="color:white" align='Center'> Free storage: {{ free_storage|round(3) }}GB </h4>
         </TD>
     </TR>
   </body>

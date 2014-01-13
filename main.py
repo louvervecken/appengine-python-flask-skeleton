@@ -72,5 +72,5 @@ def post_data():
     if request.method=='POST':
         cpu_temp = request.form.get('cpu_temp')
         ram_perc = request.form.get('ram_perc')
-        free_storage = request.form.get('free_storage')
+        free_storage = float(request.form.get('free_storage'))
         return "success", 201

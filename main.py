@@ -20,11 +20,22 @@ class StateAndSettings(db.Model):
     cpu_temp = db.FloatProperty(default=0.0, indexed=False)
     ram_perc = db.FloatProperty(default=0.0, indexed=False)
     free_storage = db.FloatProperty(default=0.0, indexed=False)
+    last_room_temp = db.FloatProperty(default=0.0, indexed=False)
+    last_heating_temp = db.FloatProperty(default=0.0, indexed=False)
+    last_update = db.DateTimeProperty(auto_now=True, indexed=False)
 
-state_key = db.Key.from_path('StateAndSettings', 'state')
+class TemperatureMeasurement(db.Model):
+    datetime = db.DateTimeProperty(required=True)
+    place = db.StringProperty(required=True)
+    temperature = db.FloatProperty(required=True)
+
+state_version = 2
+state_name = 'state_{}'.format(state_version)
+
+state_key = db.Key.from_path('StateAndSettings', state_name)
 # create state if not yet existing
 if not db.get(state_key):
-    state = StateAndSettings(key_name='state')
+    state = StateAndSettings(key_name=state_name)
     state.put()
 else:
     state = db.get(state_key)
@@ -42,7 +53,10 @@ def dashboard():
                            armed=state.alarm_enabled,
                            cpu_temp=state.cpu_temp,
                            ram_perc=state.ram_perc,
-                           free_storage=state.free_storage)
+                           free_storage=state.free_storage,
+                           last_room_temp=state.last_room_temp,
+                           last_heating_temp=state.last_heating_temp,
+                           last_update = state.last_update)
 
 @app.route('/alarm-config/get')
 def get_alarm_config():
@@ -85,8 +99,16 @@ def post_data():
     state = db.get(state_key)
     # if it is a post from the python client
     if request.method=='POST':
+        # get the values from the https post and put them in the state
         state.cpu_temp = float(request.form.get('cpu_temp'))
         state.ram_perc = float(request.form.get('ram_perc'))
         state.free_storage = float(request.form.get('free_storage'))
+        state.last_room_temp = float(request.form.get('room_temp'))
+        state.last_heating_temp = float(request.form.get('heating_temp'))
+        # store the temperature measurements
+        now = datetime.datetime.now()
+        TemperatureMeasurement(datetime=now, place='room', temperature=state.last_room_temp).put()
+        TemperatureMeasurement(datetime=now, place='heating', temperature=state.last_heating_temp).put()
+        # save the state
         state.put()
         return "success", 201

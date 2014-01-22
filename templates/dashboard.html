@@ -3,14 +3,29 @@
   <body bgcolor="black">
     <title>My alarm dashboard, if you are a burglar please leave alarm switched on.</title>
     <h1 style="color:white" align='Center'>LouPi Dashboard</h1>
+    <h3 style="color:white" align='Center'>Alarm</h1>
     <TR>
         <TD>
-            {% if armed %}
+            {% if alarm_enabled %}
                 <a href='alarm-config/set?enabled=False' style='text-align: center'>
                     <img src='../pics_and_buttons/armed.jpg' alt='' width='314px' height='115px' style='display: block; margin-left: auto; margin-right: auto;'>
                 </a>
             {% else %}
                 <a href='alarm-config/set?enabled=True' style='text-align: center'>
+                    <img src='../pics_and_buttons/off.jpg' alt='' width='314px' height='115px' style='display: block; margin-left: auto; margin-right: auto;'>
+                </a>
+            {% endif %}
+        </TD>
+    </TR>
+    <h3 style="color:white" align='Center'>Heating</h1>
+    <TR>
+        <TD>
+            {% if heating_enabled %}
+                <a href='heating-config/set?enabled=False' style='text-align: center'>
+                    <img src='../pics_and_buttons/armed.jpg' alt='' width='314px' height='115px' style='display: block; margin-left: auto; margin-right: auto;'>
+                </a>
+            {% else %}
+                <a href='heating-config/set?enabled=True' style='text-align: center'>
                     <img src='../pics_and_buttons/off.jpg' alt='' width='314px' height='115px' style='display: block; margin-left: auto; margin-right: auto;'>
                 </a>
             {% endif %}

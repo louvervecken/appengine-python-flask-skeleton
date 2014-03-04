@@ -4,3 +4,10 @@ server/lib/*
 # include README so user doesn't have to create this dir
 !server/lib/README.txt
 .DS_Store
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/rasp_server.iml
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
+.idea/workspace.xml
